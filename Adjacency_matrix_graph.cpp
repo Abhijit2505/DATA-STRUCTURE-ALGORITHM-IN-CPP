@@ -31,9 +31,9 @@ int main()
     {
         edges[i] = new int[n];
         for(int j=0;j<n;j++)
-        {
+       	 {
             edges[i][j] = 0;
-        }
+       	}
     }
     for(int i=0;i<e;i++)
     {
