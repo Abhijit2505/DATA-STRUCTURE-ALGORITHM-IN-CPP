@@ -31,7 +31,7 @@ int main()
     {
         edges[i] = new int[n];
         for(int j=0;j<n;j++)
-       	 {
+       	{
             edges[i][j] = 0;
        	}
     }
