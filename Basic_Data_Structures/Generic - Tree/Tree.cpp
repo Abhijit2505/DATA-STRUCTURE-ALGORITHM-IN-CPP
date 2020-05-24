@@ -206,6 +206,84 @@ void postorder_traversal(TreeNode<int>* root)
      cout << root -> data << " ";
 }
 
+bool is_present(TreeNode<int>* root, int x)
+{
+    if(root -> data == x)
+    {
+        return true;
+    }
+    for(int i=0;i<root -> children.size();i++)
+    {
+        if(is_present(root -> children[i],x))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int nodesGreaterThanX(TreeNode<int> *root, int x)
+{
+    if(root == nullptr)
+    {
+        return false;
+    }
+    int count = 0;
+    if(root -> data > x)
+    {
+        count++;
+    }
+    for(int i=0;i<root -> children.size();i++)
+    {
+        int p = nodesGreaterThanX(root -> children[i],x);
+        count+=p;
+    }
+    return count;
+}
+
+TreeNode<int>* maxSumNode(TreeNode<int> *root)
+{
+    if(root == nullptr)
+    {
+        return nullptr;
+    }
+    TreeNode<int>* max_node = root;
+    int maximum_value = root -> data;
+    for(int i=0;i<root -> children.size();i++)
+    {
+        maximum_value += root -> children[i] -> data;
+    }
+    for(int i=0;i<root -> children.size();i++)
+    {
+        TreeNode<int>* small_max = maxSumNode(root -> children[i]);
+        int p = small_max -> data;
+        for(int i=0;i<small_max -> children.size();i++)
+        {
+            p += small_max -> children[i] -> data;
+        }
+        if(p > maximum_value)
+        {
+            maximum_value = p;
+            max_node = small_max;
+        }
+    }
+    return max_node;
+}
+
+bool isIdentical(TreeNode<int> *root1, TreeNode<int> * root2)
+{
+    if(root1 == nullptr || root2 == nullptr)
+    {
+        return false;
+    }
+    if(root1 -> data == root2 -> data)
+    {
+        for(int i=0;i<root1->children.size();i++)
+        {
+            return isIdentical(root1 -> children[i],root2 -> children[i]);
+        }
+    }
+}
 
 // 1 3 2 3 4 2 5 6 2 7 8 0 0 0 0 1 9 0
 int main()
@@ -214,12 +292,12 @@ int main()
     TreeNode<int>* node1 = new TreeNode<int>(2);
     TreeNode<int>* node2 = new TreeNode<int>(3);
     root -> children.push_back(node1);
-    root -> children.push_back(node2);*/
+    root -> children.push_back(node2);
+    cout << max_data_node(root) << endl;
+    cout << height(root) << endl;
+    // print_level_k(root,1);
+    // cout << count_leaf_nodes(root) << endl;*/
     TreeNode<int>* root = take_input_levelwise();
     print_level_wise(root);
-    /*cout << max_data_node(root) << endl;
-    cout << height(root) << endl;*/
-    // print_level_k(root,1);
-    // cout << count_leaf_nodes(root) << endl;
     postorder_traversal(root);
 }
