@@ -285,6 +285,102 @@ bool isIdentical(TreeNode<int> *root1, TreeNode<int> * root2)
     }
 }
 
+TreeNode<int>* nextLargerElement(TreeNode<int> *root, int n)
+{
+	if(root == nullptr)
+    {
+        return nullptr;
+    }
+    TreeNode<int>* ans = nullptr;
+	if(root -> data > n)
+    {
+        ans = root;
+    }
+    for(int i=0;i<root -> children.size();i++)
+    {
+        TreeNode<int>* small_ans = nextLargerElement(root -> children[i],n);
+        if(ans==nullptr && small_ans==nullptr)
+        {
+            continue;
+        }
+        else if(ans==nullptr)
+        {
+            ans = small_ans;
+        }
+        else if(ans && small_ans)
+        {
+            if(small_ans -> data < ans -> data)
+            {
+                ans = small_ans;
+            }
+        }
+    }
+    return ans;
+}
+
+template <typename T>
+class Secondlargest_return
+{
+public:
+    TreeNode<T>* largest;
+    TreeNode<T>* secondlargest;
+    Secondlargest_return(TreeNode<T>* first, TreeNode<T>* second)
+    {
+        this -> largest = first;
+        this -> secondlargest = second;
+    }
+};
+
+Secondlargest_return<int>* second_largest_helper(TreeNode<int>* root)
+{
+    if(root == NULL)
+    {
+        Secondlargest_return<int>* ans = new Secondlargest_return<int>(NULL,NULL);
+        return ans;
+    }
+    Secondlargest_return<int>* ans = new Secondlargest_return<int>(root,NULL);
+    for(int i=0;i<root -> children.size();i++)
+    {
+        Secondlargest_return<int>* small_ans = second_largest_helper(root -> children[i]);
+        if(small_ans -> largest -> data > ans -> largest -> data)
+        {
+            if(small_ans -> secondlargest == NULL)
+            {
+                ans -> secondlargest = ans -> largest;
+                ans -> largest = small_ans -> largest; 
+            }
+            else
+            {
+                if(small_ans -> secondlargest -> data > ans -> largest -> data)
+                {
+                    ans -> secondlargest = small_ans -> secondlargest;
+                    ans -> largest = small_ans -> largest;
+                }
+                else
+                {
+                    ans -> secondlargest = ans -> largest;
+                    ans -> largest = small_ans -> largest;
+                }
+            }
+        }
+        else
+        {
+            if((ans -> largest -> data != small_ans -> largest -> data)&&
+               (ans -> secondlargest == NULL || small_ans -> largest -> data > ans -> secondlargest -> data))
+            {
+                ans -> secondlargest = small_ans -> largest;
+            }
+        }
+    }
+    return ans;
+}
+
+TreeNode <int>* secondLargest(TreeNode<int> *root) 
+{
+    return second_largest_helper(root) -> secondlargest;
+}
+
+
 // 1 3 2 3 4 2 5 6 2 7 8 0 0 0 0 1 9 0
 int main()
 {
