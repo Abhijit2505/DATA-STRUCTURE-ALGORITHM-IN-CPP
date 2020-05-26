@@ -22,7 +22,6 @@ public:
         delete right;
     }
 };
-
 void printTree(BinaryTreeNode<int>* root)
 {
     if(root == nullptr)
@@ -58,7 +57,6 @@ BinaryTreeNode<int>* take_input()
     root -> right = rightnode;
     return root;
 }
-
 BinaryTreeNode<int>* take_input_levelwise()
 {
     int rootdata;
@@ -96,9 +94,137 @@ BinaryTreeNode<int>* take_input_levelwise()
     }
     return root;
 }
-
+void printLevelWise(BinaryTreeNode<int>* root)
+{
+    if(root == nullptr)
+        return;
+    queue<BinaryTreeNode<int>*> pending_nodes2;
+    pending_nodes2.push(root);
+    while(!pending_nodes2.empty())
+    {
+        BinaryTreeNode<int>* front = pending_nodes2.front();
+        pending_nodes2.pop();
+        cout << front -> data << ":";
+        if(front -> left)
+        {
+            cout << "L:" << front -> left -> data << ",";
+            pending_nodes2.push(front -> left);
+        }
+        else
+        {
+            cout << "L:" << -1 << ",";
+        }
+        if(front -> right)
+        {
+            cout << "R:" << front -> right -> data;
+            pending_nodes2.push(front -> right);
+        }
+        else
+        {
+             cout << "R:" << -1;
+        }
+        cout << endl;
+    }
+}
+int numNodes(BinaryTreeNode<int>* root)
+{
+    if(root == nullptr)
+    {
+        return 0;
+    }
+    int ans = 1;
+    return ans+numNodes(root -> left)+numNodes(root -> right);
+}
+bool isNodePresent(BinaryTreeNode<int>* root, int x)
+{
+    if(root == nullptr)
+    {
+        return false;
+    }
+    if(root -> data == x)
+    {
+        return true;
+    }
+    bool left,right;
+    if(root -> left)
+    {
+        left = isNodePresent(root -> left,x);
+    }
+    if(root->right)
+    {
+        right = isNodePresent(root -> right,x);
+    }
+    if(left || right)
+    {
+        return true;
+    }
+    return false;
+}
+int height(BinaryTreeNode<int> *root)
+{
+    if(root == nullptr)
+    {
+        return 0;
+    }
+    int left_height = 0;
+    int right_height = 0;
+    if(root -> left)
+    {
+        left_height+=height(root -> left);
+    }
+    if(root -> right)
+    {
+        right_height+=height(root -> right);
+    }
+    return left_height > right_height ? left_height+1 : right_height+1;
+}
+void mirrorBinaryTree(BinaryTreeNode<int>* root)
+{
+    if(root == nullptr)
+    {
+        return;
+    }
+    if(root -> left)
+    {
+        mirrorBinaryTree(root -> left);
+    }
+    if(root -> right)
+    {
+        mirrorBinaryTree(root -> right);
+    }
+    BinaryTreeNode<int>* temp = root -> right;
+    root -> right = root -> left;
+    root -> left = temp;
+}
 int main()
 {
     BinaryTreeNode<int>* root = take_input_levelwise();
-    printTree(root);
+    printLevelWise(root);
+    //cout << "Number of nodes is: " << numNodes(root) << endl;
+    //cout << "Height of the binary tree is " << height(root) << endl;
+    mirrorBinaryTree(root);
+    cout << " ------------------------- " << endl;
+    printLevelWise(root);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
